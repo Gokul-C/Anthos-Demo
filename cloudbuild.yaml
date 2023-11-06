@@ -22,5 +22,6 @@ steps:
     kubectl apply -f namespace.yaml
     kubectl apply -f  deployment.yaml -n anthos-ci
     kubectl apply -f   service.yaml -n anthos-ci
-    
-    
+ 
+  substitutions:
+    _COMMIT_SHA: 'echo $COMMIT_SHA'
