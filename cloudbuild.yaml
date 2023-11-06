@@ -7,4 +7,4 @@ steps:
     gcloud alpha container bare-metal clusters enroll hybrid-cluster-01 \
     --project=hpe-managed-services \
     --location=asia-east1 \
-    --admin-cluster-membership=projects/undefined/locations/global/memberships/undefined
+    --admin-cluster-membership=projects/hpe-managed-services/locations/global/memberships/hybrid-cluster-01
