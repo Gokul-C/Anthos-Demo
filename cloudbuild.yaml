@@ -1,17 +1,10 @@
 steps:
-# Docker Build
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA', '.']
-  
-# Docker Push
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA']
-           
-- name: 'gcr.io/cloud-builders/kubectl'
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
   args:
-  - 'get'
-  - 'pods'
-  - '-A'
-  env:
-  - 'CLOUDSDK_COMPUTE_ZONE=registered'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=hybrid-cluster-01'
+  - '-c'
+  - |
+    gcloud alpha container bare-metal clusters enroll hybrid-cluster-01 \
+    --project=hpe-managed-services \
+    --location=asia-east1 \
+    --admin-cluster-membership=projects/undefined/locations/global/memberships/undefined
