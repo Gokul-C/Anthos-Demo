@@ -1,29 +1,12 @@
 steps:
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: bash
+  id: Deploy to Anthos cluster on VMware
   args:
   - '-c'
   - |
-    gcloud services enable \
-    --project hpe-managed-services \
-    gkeonprem.googleapis.com
-    
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    gcloud container bare-metal clusters query-version-config \
-    --project=hpe-managed-services \
-    --location=asia-east1
-    
-    
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    gcloud container bare-metal admin-clusters enroll hybrid-cluster-01 \
-    --project=hpe-managed-services \
-    --admin-cluster-membership=projects/hpe-managed-services/locations/global/memberships/hybrid-cluster-01 \
-    --location=asia-east1
+    set -x && \
+    export KUBECONFIG="$(pwd)/gateway-kubeconfig" && \
+    gcloud container fleet memberships get-credentials hybrid-cluster-01 && \
+    kubectl --kubeconfig gateway-kubeconfig get pods
+   
