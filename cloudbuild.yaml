@@ -24,8 +24,6 @@ steps:
     kubectl set image deploy/my-app my-app=gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA -n anthos-ci
     kubectl apply -f   service.yaml -n anthos-ci
  
-images: [
-   'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA'
-  ]
-substitutions:
-  _COMMIT_SHA: 'echo $COMMIT_SHA'
+#images: [
+#   'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA'
+#  ]
