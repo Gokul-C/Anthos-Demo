@@ -1,7 +1,7 @@
 steps:
 # Docker Build
 - name: 'gcr.io/cloud-builders/docker'
-  id: Docker build
+  id: Docker Build
   args: ['build', '-t', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA', '.']
   
 # Docker Push
@@ -19,4 +19,8 @@ steps:
     set -x && \
     export KUBECONFIG="$(pwd)/gateway-kubeconfig" && \
     gcloud container fleet memberships get-credentials hybrid-cluster-01
-    kubectl create ns test
+    kubectl apply -f namespace.yaml
+    kubectl apply -f  deployment.yaml -n anthos-ci
+    kubectl apply -f   service.yaml -n anthos-ci
+    
+    
