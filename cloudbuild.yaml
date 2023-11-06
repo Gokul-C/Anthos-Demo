@@ -4,7 +4,7 @@ steps:
   args:
   - '-c'
   - |
-    gcloud alpha container bare-metal clusters enroll hybrid-cluster-01 \
+    gcloud container bare-metal admin-clusters enroll hybrid-cluster-01 \
     --project=hpe-managed-services \
-    --location=asia-east1 \
-    --admin-cluster-membership=projects/hpe-managed-services/locations/global/memberships/hybrid-cluster-01
+    --admin-cluster-membership=projects/hpe-managed-services/locations/global/memberships/hybrid-cluster-01 \
+    --location=asia-east1
