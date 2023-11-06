@@ -7,6 +7,5 @@ steps:
   - |
     set -x && \
     export KUBECONFIG="$(pwd)/gateway-kubeconfig" && \
-    gcloud container fleet memberships get-credentials hybrid-cluster-01 && \
-    kubectl --kubeconfig gateway-kubeconfig get pods
+    gcloud container fleet memberships get-credentials hybrid-cluster-01
    
