@@ -1,7 +1,18 @@
 steps:
+# Docker Build
+- name: 'gcr.io/cloud-builders/docker'
+  id: Docker build
+  args: ['build', '-t', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA', '.']
+  
+# Docker Push
+- name: 'gcr.io/cloud-builders/docker'
+  id: Docker Push to GCP Repository
+  args: ['push', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA']
+  
+ #Deploy to 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: bash
-  id: Deploy to Anthos cluster on VMware
+  id: Deploy to Anthos K8S cluster
   args:
   - '-c'
   - |
