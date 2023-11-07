@@ -16,12 +16,15 @@ steps:
   args:
     - '-c'
     - 'output_variable=$(gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA --remote | grep -oP "scan: projects/hpe-managed-services/locations/us/scans/\\K\\S+")'
-  
-  
+    
+# Docker Image Scan Results
 - name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: bash
-  id: 'Docker Image Scan Results'
-  args: [ '-c', "echo $output_variable" ]
+  entrypoint: 'bash'
+  id: 'Docker Image Scan results'
+  args:
+    - '-c'
+    - 'gcloud artifacts docker images list-vulnerabilities  projects/hpe-managed-services/locations/us/scans/$output_variable --limit=100'
+    
     
 #Deploy to Anthos K8S cluster
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
