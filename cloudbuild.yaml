@@ -23,6 +23,7 @@ steps:
       echo $$output_variable > /workspace/myvalue
       export output_variable=$(cat /workspace/myvalue)
       echo $$output_variable
+      gcloud artifacts docker images list-vulnerabilities  projects/hpe-managed-services/locations/us/scans/$$output_variable --limit=100
     
     
 #Deploy to Anthos K8S cluster
