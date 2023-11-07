@@ -1,66 +1,9 @@
 steps:
 
-steps:
-- name: 'gcr.io/cloud-builders/wget'
-  args: ['-O', 'sonar-scanner-cli-5.0.1.3006-linux.zip', 'https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip']
-  
-# Sonar Scan
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  id: 'Sonar Scan'
+- name: 'gcr.io/hpe-managed-services/sonar-scanner:latest'
   args:
-    - '-c'
-    - |
-      gunzip sonar-scanner-cli-5.0.1.3006-linux.zip
-      export SONAR_SCANNER_VERSION=5.0.1.3006
-      wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
-      unzip sonar-scanner-cli-5.0.1.3006-linux.zip
-      ls -ltr
-      export SONAR_TOKEN=d9ccc9c180b3a11cd216dec7b698042f4857b127
-      sonar-scanner \
-      -Dsonar.organization=anthos-demo \
-      -Dsonar.projectKey=anthos-demo_anthos-demo \
-      -Dsonar.sources=. \
-      -Dsonar.host.url=https://sonarcloud.io
-      
-# Docker Build
-- name: 'gcr.io/cloud-builders/docker'
-  id: Docker Build
-  args: ['build', '-t', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA', '.']
-  
-# Docker Push
-- name: 'gcr.io/cloud-builders/docker'
-  id: Docker Push to GCP Repository
-  args: ['push', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA']
-  
-# Docker Image Scan
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  id: 'Docker Image Scan'
-  args:
-    - '-c'
-    - |
-      export output_variable=$(gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA --remote | grep -oP "scan: projects/hpe-managed-services/locations/us/scans/\\K\\S+")
-      sleep 15s
-      #export output_variable=$(output_variable)
-      echo $$output_variable
-      echo $$output_variable > /workspace/myvalue
-      export output_variable=$(cat /workspace/myvalue)
-      echo $$output_variable
-      gcloud artifacts docker images list-vulnerabilities  projects/hpe-managed-services/locations/us/scans/$$output_variable --limit=100
-    
-    
-#Deploy to Anthos K8S cluster
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: bash
-  id: Deploy to Anthos K8S cluster
-  args:
-  - '-c'
-  - |
-    set -x && \
-    export KUBECONFIG="$(pwd)/gateway-kubeconfig" && \
-    gcloud container fleet memberships get-credentials hybrid-cluster-01
-    kubectl apply -f namespace.yaml
-    kubectl apply -f  deployment.yaml -n anthos-ci
-    kubectl set image deploy/my-app my-app=gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA -n anthos-ci
-    kubectl apply -f   service.yaml -n anthos-ci
+  export SONAR_TOKEN=d9ccc9c180b3a11cd216dec7b698042f4857b127
+  - '-Dsonar.host.url=https://sonarcloud.io'
+  - '-Dsonar.projectKey=anthos-demo_anthos-demo'
+  - '-Dsonar.organization=nthos-demo'
+  - '-Dsonar.sources=.'
