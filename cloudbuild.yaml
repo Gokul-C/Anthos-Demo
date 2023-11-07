@@ -10,12 +10,9 @@ steps:
   args: ['push', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA']
   
 - name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: bash
   id: 'Docker Image Scan'
-  args:
-  - '-c'
-  - |
-    set -x && \
-    gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA --remote
+  args: [ '-c', "gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA --remote" ]
     
 #Deploy to Anthos K8S cluster
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
