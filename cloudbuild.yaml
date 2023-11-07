@@ -8,10 +8,9 @@ steps:
     - |
       export SONAR_SCANNER_VERSION=5.0.1.3006
       export SONAR_SCANNER_HOME=$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-linux
-      curl --create-dirs -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-linux.zip
-      unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
-      export PATH=$SONAR_SCANNER_HOME/bin:$PATH
-      export SONAR_SCANNER_OPTS="-server"
+      wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+      unzip sonar-scanner-cli-5.0.1.3006-linux.zip
+      ls -ltr
       export SONAR_TOKEN=d9ccc9c180b3a11cd216dec7b698042f4857b127
       sonar-scanner \
       -Dsonar.organization=anthos-demo \
