@@ -6,7 +6,7 @@ steps:
   args:
     - '-c'
     - |
-      cat /etc/os-release
+      apt install wget unzip -y
       export SONAR_SCANNER_VERSION=5.0.1.3006
       wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
       unzip sonar-scanner-cli-5.0.1.3006-linux.zip
