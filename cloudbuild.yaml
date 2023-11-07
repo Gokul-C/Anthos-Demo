@@ -9,10 +9,13 @@ steps:
   id: Docker Push to GCP Repository
   args: ['push', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA']
   
+# Docker Image Scan
 - name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: bash
+  entrypoint: 'bash'
   id: 'Docker Image Scan'
-  args: ['-c', "output_variable=$(gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA  --remote | grep -oP 'scan: projects/hpe-managed-services/locations/us/scans/\K\S+')"]
+  args:
+    - '-c'
+    - 'output_variable=$(gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA --remote | grep -oP "scan: projects/hpe-managed-services/locations/us/scans/\\K\\S+")'
   
   
 - name: 'gcr.io/cloud-builders/gcloud'
