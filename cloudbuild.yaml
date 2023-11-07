@@ -14,9 +14,9 @@ steps:
   script: |
     #!/bin/sh
     set -e
-    ##gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA  --remote
+    gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA  --remote
     ##gcloud artifacts docker images list-vulnerabilities  projects/hpe-managed-services/locations/us/scans/0fb7a9aa-bbf4-4b74-b5f7-8739b34131fb --limit=100
-    output_variable=$(gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA  | grep -oP 'scan: projects/hpe-managed-services/locations/us/scans/\K\S+')
+    ##output_variable=$(gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA  | grep -oP 'scan: ##projects/hpe-managed-services/locations/us/scans/\K\S+')
     gcloud artifacts docker images list-vulnerabilities  projects/hpe-managed-services/locations/us/scans/$output_variable --limit=100
   
  #Deploy to 
