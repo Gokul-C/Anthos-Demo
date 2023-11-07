@@ -48,6 +48,6 @@ steps:
     export KUBECONFIG="$(pwd)/gateway-kubeconfig" && \
     gcloud container fleet memberships get-credentials hybrid-cluster-01
     kubectl apply -f namespace.yaml
-    kubectl apply -f  deployment.yaml -n anthos-ci
-    kubectl set image deploy/my-app my-app=gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA -n anthos-ci
-    kubectl apply -f   service.yaml -n anthos-ci
+    kubectl apply -f  deployment.yaml -n staging-ci
+    kubectl set image deploy/my-app my-app=gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA -n staging-ci
+    kubectl apply -f   service.yaml -n staging-ci
