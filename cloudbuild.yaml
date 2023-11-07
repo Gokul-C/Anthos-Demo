@@ -16,9 +16,17 @@ steps:
   args:
     - '-c'
     - 'output_variable=$(gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA --remote | grep -oP "scan: projects/hpe-managed-services/locations/us/scans/\\K\\S+")'
+    - 'sleep 15s'
     - 'echo "output_variable: ${output_variable}"'
     - 'echo ${output_variable}'
+    - 'echo ::set-env name=output_variable::${output_variable}'
     
+    
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - 'echo "Retrieved value from previous step: $output_variable"'
     
 #Deploy to Anthos K8S cluster
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
