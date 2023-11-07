@@ -6,4 +6,4 @@ steps:
   - '-Dsonar.host.url=https://sonarcloud.io'
   - '-Dsonar.projectKey=anthos-demo_anthos-demo'
   - '-Dsonar.organization=nthos-demo'
-  - '-Dsonar.sources=.'
+  - '-Dsonar.sources=webapp'
