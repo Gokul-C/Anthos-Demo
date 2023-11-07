@@ -12,3 +12,5 @@ steps:
       
 images: 
 - 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
+
+tags: ['cloud-builders-community']
