@@ -1,4 +1,24 @@
 steps:
+# Sonar Scan
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  id: 'Sonar Scan'
+  args:
+    - '-c'
+    - |
+      export SONAR_SCANNER_VERSION=5.0.1.3006
+      export SONAR_SCANNER_HOME=$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-linux
+      curl --create-dirs -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-linux.zip
+      unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
+      export PATH=$SONAR_SCANNER_HOME/bin:$PATH
+      export SONAR_SCANNER_OPTS="-server"
+      export SONAR_TOKEN=d9ccc9c180b3a11cd216dec7b698042f4857b127
+      sonar-scanner \
+      -Dsonar.organization=anthos-demo \
+      -Dsonar.projectKey=anthos-demo_anthos-demo \
+      -Dsonar.sources=. \
+      -Dsonar.host.url=https://sonarcloud.io
+      
 # Docker Build
 - name: 'gcr.io/cloud-builders/docker'
   id: Docker Build
