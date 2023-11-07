@@ -14,7 +14,13 @@ steps:
   id: Docker Build
   args: ['build', '-t', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA', '.']
   
+    
+# Docker Push
+- name: 'gcr.io/cloud-builders/docker'
+  id: Docker Push to GCP Repository
+  args: ['push', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA']
   
+
 # Docker Image Scan
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
@@ -29,16 +35,7 @@ steps:
       echo $$output_variable > /workspace/myvalue
       export output_variable=$(cat /workspace/myvalue)
       echo $$output_variable
-      gcloud artifacts docker images list-vulnerabilities  projects/hpe-managed-services/locations/us/scans/$$output_variable --limit=100
-      
-      
-# Docker Push
-- name: 'gcr.io/cloud-builders/docker'
-  id: Docker Push to GCP Repository
-  args: ['push', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA']
-  
-
-    
+      gcloud artifacts docker images list-vulnerabilities  projects/hpe-managed-services/locations/us/scans/$$output_variable --limit=100  
     
 #Deploy to Anthos K8S cluster
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
