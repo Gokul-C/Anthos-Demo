@@ -1,9 +1,11 @@
 steps:
-
-- name: 'gcr.io/hpe-managed-services/sonar-scanner:latest'
-  args:
-  export SONAR_TOKEN=d9ccc9c180b3a11cd216dec7b698042f4857b127
-  - '-Dsonar.host.url="https://sonarcloud.io"'
-  - '-Dsonar.projectKey=anthos-demo_anthos-demo'
-  - '-Dsonar.organization=nthos-demo'
-  - '-Dsonar.sources=webapp'
+  - name: 'gcr.io/hpe-managed-services/sonar-scanner:latest'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        export SONAR_TOKEN=d9ccc9c180b3a11cd216dec7b698042f4857b127
+        - '-Dsonar.host.url="https://sonarcloud.io"'
+        - '-Dsonar.projectKey=anthos-demo_anthos-demo'
+        - '-Dsonar.organization=nthos-demo'
+        - '-Dsonar.sources=webapp'
