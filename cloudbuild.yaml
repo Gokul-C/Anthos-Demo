@@ -16,8 +16,8 @@ steps:
   args:
     - '-c'
     - 'output_variable=$(gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA --remote | grep -oP "scan: projects/hpe-managed-services/locations/us/scans/\\K\\S+")'
+    - 'echo "output_variable: $output_variable"'
     - 'echo $output_variable'
-  
     
     
 #Deploy to Anthos K8S cluster
