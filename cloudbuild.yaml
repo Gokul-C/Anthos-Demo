@@ -14,7 +14,7 @@ steps:
   script: |
     #!/bin/sh
     set -e
-    gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA --remote
+    gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:00723300fcfe7e7474690bd851668500d1e3ac8b --remote
   
  #Deploy to 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
