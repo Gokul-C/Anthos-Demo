@@ -9,6 +9,16 @@ steps:
   id: Docker Push to GCP Repository
   args: ['push', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA']
   
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: 'Docker Image Scan'
+  script: |
+    #!/bin/sh
+    set -e
+    ##gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA  --remote
+    ##gcloud artifacts docker images list-vulnerabilities  projects/hpe-managed-services/locations/us/scans/0fb7a9aa-bbf4-4b74-b5f7-8739b34131fb --limit=100
+    output_variable=$(gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA --remote | grep -oP 'scan: projects/hpe-managed-services/locations/us/scans/\K\S+')
+    gcloud artifacts docker images list-vulnerabilities  projects/hpe-managed-services/locations/us/scans/$output_variable --limit=100
+  
  #Deploy to 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: bash
@@ -23,3 +33,15 @@ steps:
     kubectl apply -f  deployment.yaml -n anthos-ci
     kubectl set image deploy/my-app my-app=gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA -n anthos-ci
     kubectl apply -f   service.yaml -n anthos-ci
+
+
+
+- name: 'gcr.io/cloud-builders/gcloud'
+    id: 'Docker Image Scan'
+    script: |
+      #!/bin/sh
+      set -e
+      ##gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA  --remote
+      ##gcloud artifacts docker images list-vulnerabilities  projects/hpe-managed-services/locations/us/scans/0fb7a9aa-bbf4-4b74-b5f7-8739b34131fb --limit=100
+      output_variable=$(gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA --remote | grep -oP 'scan: projects/hpe-managed-services/locations/us/scans/\K\S+')
+      gcloud artifacts docker images list-vulnerabilities  projects/hpe-managed-services/locations/us/scans/$output_variable --limit=100
