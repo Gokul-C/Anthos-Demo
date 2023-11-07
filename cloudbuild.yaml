@@ -21,7 +21,7 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: bash
   id: 'Docker Image Scan Results'
-  args: [ '-c', "$output_variable" ]
+  args: [ '-c', "echo $output_variable" ]
     
 #Deploy to Anthos K8S cluster
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
