@@ -6,7 +6,3 @@ steps:
     - |
       export SONAR_TOKEN=d9ccc9c180b3a11cd216dec7b698042f4857b127
       sonar-scanner   -Dsonar.organization=anthos-demo   -Dsonar.projectKey=anthos-demo_anthos-demo  -Dsonar.sources=.   -Dsonar.host.url=https://sonarcloud.io
-images: 
-- 'gcr.io/$PROJECT_ID/sonar-scanner:latest'
-
-tags: ['cloud-builders-community']
