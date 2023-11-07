@@ -1,13 +1,4 @@
 steps:
-  # Source Code Scan with SonarQube
-- name: 'gcr.io/$PROJECT_ID/sonar-scanner'
-  id: Source Code Scan with SonarQube
-  entrypoint: 'bash'
-  args:
-    - '-c'
-    - |
-      export SONAR_TOKEN=d9ccc9c180b3a11cd216dec7b698042f4857b127
-      sonar-scanner   -Dsonar.organization=anthos-demo   -Dsonar.projectKey=anthos-demo_anthos-demo  -Dsonar.sources=.   -Dsonar.host.url=https://sonarcloud.io
 
 # Docker Build
 - name: 'gcr.io/cloud-builders/docker'
@@ -20,22 +11,6 @@ steps:
   id: Docker Push to GCP Repository
   args: ['push', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA']
   
-
-# Docker Image Scan
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  id: 'Docker Image Scan'
-  args:
-    - '-c'
-    - |
-      export output_variable=$(gcloud artifacts docker images scan gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA --remote | grep -oP "scan: projects/hpe-managed-services/locations/us/scans/\\K\\S+")
-      sleep 15s
-      #export output_variable=$(output_variable)
-      echo $$output_variable
-      echo $$output_variable > /workspace/myvalue
-      export output_variable=$(cat /workspace/myvalue)
-      echo $$output_variable
-      gcloud artifacts docker images list-vulnerabilities  projects/hpe-managed-services/locations/us/scans/$$output_variable --limit=100  
     
 #Deploy to Anthos K8S cluster
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
