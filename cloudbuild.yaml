@@ -1,5 +1,5 @@
 steps:
-  # Source Code Scan with SonarQube
+  ## Source Code Scan with SonarQube
 - name: 'gcr.io/$PROJECT_ID/sonar-scanner'
   id: Source Code Scan with SonarQube
   entrypoint: 'bash'
