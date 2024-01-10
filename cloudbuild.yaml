@@ -39,24 +39,21 @@ steps:
 
 #Sign the Image
 - id: 'create-attestation'
-  name: 'gcr.io/hpe-managed-services/binauthz-attestation:latest'
-  args:
-    - '--artifact-url'
-    - 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA'
-    - '--attestor'
-    - 'admin-attestor'
-    - '--attestor-project'
-    - 'hpe-managed-services'
-    - '--keyversion'
-    - '1'
-    - '--keyversion-project'
-    - 'hpe-managed-services'
-    - '--keyversion-location'
-    - 'global'
-    - '--keyversion-keyring'
-    - 'demokeyring'
-    - '--keyversion-key'
-    - 'binary-auth'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: /bin/bash
+    args:
+      - -c
+      - |
+        gcloud beta container binauthz attestations sign-and-create \
+        --project="hpe-managed-services" \
+        --artifact-url="gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA" \
+        --attestor="admin-attestor" \
+        --attestor-project="hpe-managed-services" \
+        --keyversion-project="hpe-managed-services" \
+        --keyversion-location="global" \
+        --keyversion-keyring="demokeyring" \
+        --keyversion-key="binary-auth" \
+        --keyversion="1"
     
 #Deploy to Anthos K8S cluster
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
