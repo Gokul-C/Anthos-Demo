@@ -36,6 +36,27 @@ steps:
       export output_variable=$(cat /workspace/myvalue)
       echo $$output_variable
       gcloud artifacts docker images list-vulnerabilities  projects/hpe-managed-services/locations/us/scans/$$output_variable --limit=100  
+
+#Sign the Image
+- id: 'create-attestation'
+  name: 'gcr.io/hpe-managed-services/binauthz-attestation:latest'
+  args:
+    - '--artifact-url'
+    - 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA'
+    - '--attestor'
+    - 'admin-attestor'
+    - '--attestor-project'
+    - 'hpe-managed-services'
+    - '--keyversion'
+    - '1'
+    - '--keyversion-project'
+    - 'hpe-managed-services'
+    - '--keyversion-location'
+    - 'global'
+    - '--keyversion-keyring'
+    - 'demokeyring'
+    - '--keyversion-key'
+    - 'binary-auth'
     
 #Deploy to Anthos K8S cluster
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -46,7 +67,7 @@ steps:
   - |
     set -x && \
     export KUBECONFIG="$(pwd)/gateway-kubeconfig" && \
-    gcloud container fleet memberships get-credentials hybrid-cluster-01
+    gcloud container fleet memberships get-credentials hubcluster
     kubectl apply -f namespace.yaml
     kubectl apply -f  deployment.yaml -n anthos-ci
     kubectl set image deploy/my-app my-app=gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA -n anthos-ci
