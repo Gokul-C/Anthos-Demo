@@ -13,6 +13,24 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   id: Docker Build
   args: ['build', '-t', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA', '.']
+
+#Sign the Image
+- id: 'create-attestation'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: /bin/bash
+  args:
+      - -c
+      - |
+        gcloud beta container binauthz attestations sign-and-create \
+        --project="hpe-managed-services" \
+        --artifact-url="gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA" \
+        --attestor="admin-attestor" \
+        --attestor-project="hpe-managed-services" \
+        --keyversion-project="hpe-managed-services" \
+        --keyversion-location="global" \
+        --keyversion-keyring="demokeyring" \
+        --keyversion-key="binary-auth" \
+        --keyversion="1"
   
     
 # Docker Push
@@ -37,23 +55,7 @@ steps:
       echo $$output_variable
       gcloud artifacts docker images list-vulnerabilities  projects/hpe-managed-services/locations/us/scans/$$output_variable --limit=100  
 
-#Sign the Image
-- id: 'create-attestation'
-  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: /bin/bash
-  args:
-      - -c
-      - |
-        gcloud beta container binauthz attestations sign-and-create \
-        --project="hpe-managed-services" \
-        --artifact-url="gcr.io/hpe-managed-services/anthos-ci:$BUILD_ID" \
-        --attestor="admin-attestor" \
-        --attestor-project="hpe-managed-services" \
-        --keyversion-project="hpe-managed-services" \
-        --keyversion-location="global" \
-        --keyversion-keyring="demokeyring" \
-        --keyversion-key="binary-auth" \
-        --keyversion="1"
+
     
 #Deploy to Anthos K8S cluster
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
