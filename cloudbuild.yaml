@@ -41,7 +41,7 @@ steps:
 - id: 'create-attestation'
   name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: /bin/bash
-    args:
+  args:
       - -c
       - |
         gcloud beta container binauthz attestations sign-and-create \
