@@ -26,7 +26,10 @@ steps:
   args:
       - -c
       - |
-        IMAGE_DIGEST=$(gcloud builds describe $BUILD_ID --format 'value(results.images[0].digest)')
+        export IMAGE_DIGEST=$(gcloud builds describe $BUILD_ID --format 'value(results.images[0].digest)')
+        echo "IMAGE_DIGEST=$IMAGE_DIGEST" > "$_IMAGE_DIGEST"
+        cat "$_IMAGE_DIGEST"
+        #IMAGE_DIGEST=$(gcloud builds describe $BUILD_ID --format 'value(results.images[0].digest)')
   
         gcloud beta container binauthz attestations sign-and-create \
         --project="hpe-managed-services" \
