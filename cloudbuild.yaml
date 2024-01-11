@@ -26,7 +26,7 @@ steps:
   args:
       - -c
       - |
-        export IMAGE_DIGEST=$(gcloud builds describe $BUILD_ID --format 'value(results.images[0].digest)')
+        export IMAGE_DIGEST=$(gcloud container images describe gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA --format 'value(image_summary.digest)' 2>/dev/null)
         echo "$$IMAGE_DIGEST
         echo $$IMAGE_DIGEST > /workspace/digest
         export IMAGE_DIGEST=$(cat /workspace/digest)
