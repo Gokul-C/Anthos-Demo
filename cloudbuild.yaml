@@ -27,13 +27,16 @@ steps:
       - -c
       - |
         export IMAGE_DIGEST=$(gcloud builds describe $BUILD_ID --format 'value(results.images[0].digest)')
-        echo "IMAGE_DIGEST=$IMAGE_DIGEST" > "$_IMAGE_DIGEST"
-        cat "$_IMAGE_DIGEST"
+        echo "$$IMAGE_DIGEST
+        echo $$IMAGE_DIGEST > /workspace/digest
+        export IMAGE_DIGEST=$(cat /workspace/digest)
+        echo $$IMAGE_DIGEST
+        #cat "$_IMAGE_DIGEST"
         #IMAGE_DIGEST=$(gcloud builds describe $BUILD_ID --format 'value(results.images[0].digest)')
   
         gcloud beta container binauthz attestations sign-and-create \
         --project="hpe-managed-services" \
-        --artifact-url="gcr.io/hpe-managed-services/anthos-ci:$_IMAGE_DIGEST" \
+        --artifact-url="gcr.io/hpe-managed-services/anthos-ci:$$IMAGE_DIGEST" \
         --attestor="admin-attestor" \
         --attestor-project="hpe-managed-services" \
         --keyversion-project="hpe-managed-services" \
