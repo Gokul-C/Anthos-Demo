@@ -33,7 +33,7 @@ steps:
   
         gcloud beta container binauthz attestations sign-and-create \
         --project="hpe-managed-services" \
-        --artifact-url="gcr.io/hpe-managed-services/anthos-ci:${IMAGE_DIGEST}" \
+        --artifact-url="gcr.io/hpe-managed-services/anthos-ci:$_IMAGE_DIGEST" \
         --attestor="admin-attestor" \
         --attestor-project="hpe-managed-services" \
         --keyversion-project="hpe-managed-services" \
@@ -75,3 +75,5 @@ steps:
     kubectl apply -f  deployment.yaml -n anthos-ci
     kubectl set image deploy/my-app my-app=gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA -n anthos-ci
     kubectl apply -f   service.yaml -n anthos-ci
+substitutions:
+  _IMAGE_DIGEST: /workspace/command_output.txt
