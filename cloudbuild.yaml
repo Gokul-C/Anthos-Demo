@@ -30,7 +30,7 @@ steps:
   
         gcloud beta container binauthz attestations sign-and-create \
         --project="hpe-managed-services" \
-        --artifact-url="gcr.io/hpe-managed-services/anthos-ci:$IMAGE_DIGEST" \
+        --artifact-url="gcr.io/hpe-managed-services/anthos-ci:${IMAGE_DIGEST}" \
         --attestor="admin-attestor" \
         --attestor-project="hpe-managed-services" \
         --keyversion-project="hpe-managed-services" \
