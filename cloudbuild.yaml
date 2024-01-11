@@ -76,6 +76,7 @@ steps:
     gcloud container fleet memberships get-credentials hubcluster
     kubectl apply -f namespace.yaml
     kubectl apply -f  deployment.yaml -n anthos-ci
+    echo $$IMAGE_DIGEST
     kubectl set image deploy/my-app my-app=gcr.io/hpe-managed-services/anthos-ci@$$IMAGE_DIGEST -n anthos-ci
     kubectl apply -f   service.yaml -n anthos-ci
 substitutions:
