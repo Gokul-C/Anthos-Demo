@@ -13,6 +13,11 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   id: Docker Build
   args: ['build', '-t', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA', '.']
+    
+# Docker Push
+- name: 'gcr.io/cloud-builders/docker'
+  id: Docker Push to GCP Repository
+  args: ['push', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA']
 
 #Sign the Image
 - id: 'create-attestation'
@@ -21,9 +26,11 @@ steps:
   args:
       - -c
       - |
+        IMAGE_DIGEST=$(gcloud builds describe $BUILD_ID --format 'value(results.images[0].digest)')
+  
         gcloud beta container binauthz attestations sign-and-create \
         --project="hpe-managed-services" \
-        --artifact-url="gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA" \
+        --artifact-url="gcr.io/hpe-managed-services/anthos-ci:$IMAGE_DIGEST" \
         --attestor="admin-attestor" \
         --attestor-project="hpe-managed-services" \
         --keyversion-project="hpe-managed-services" \
@@ -31,12 +38,6 @@ steps:
         --keyversion-keyring="demokeyring" \
         --keyversion-key="binary-auth" \
         --keyversion="1"
-  
-    
-# Docker Push
-- name: 'gcr.io/cloud-builders/docker'
-  id: Docker Push to GCP Repository
-  args: ['push', 'gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA']
   
 
 # Docker Image Scan
