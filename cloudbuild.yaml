@@ -22,9 +22,9 @@ steps:
 #Sign the Image
 - id: 'create-attestation'
   name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: /bin/bash
+  entrypoint: 'bash'
   args:
-      - -c
+      - '-c'
       - |
         export IMAGE_DIGEST=$(gcloud container images describe gcr.io/hpe-managed-services/anthos-ci:$COMMIT_SHA --format 'value(image_summary.digest)' 2>/dev/null)
         echo "$$IMAGE_DIGEST
